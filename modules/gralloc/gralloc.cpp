@@ -77,6 +77,10 @@ extern int gralloc_register_buffer(gralloc_module_t const* module,
 extern int gralloc_unregister_buffer(gralloc_module_t const* module,
         buffer_handle_t handle);
 
+#ifdef SLSI_S5P6442
+extern int gralloc_perform(struct gralloc_module_t const* module,
+        int operation, ... );
+#endif
 /*****************************************************************************/
 
 static struct hw_module_methods_t gralloc_module_methods = {
@@ -98,6 +102,9 @@ struct private_module_t HAL_MODULE_INFO_SYM = {
         unregisterBuffer: gralloc_unregister_buffer,
         lock: gralloc_lock,
         unlock: gralloc_unlock,
+#ifdef SLSI_S5P6442
+        perform: gralloc_perform,
+#endif
     },
     framebuffer: 0,
     flags: 0,
@@ -347,6 +354,7 @@ static int gralloc_alloc(alloc_device_t* dev,
         return -EINVAL;
 
     size_t size, stride;
+#ifdef SLSI_S5P6442
     if (format == HAL_PIXEL_FORMAT_YCbCr_420_SP || 
             format == HAL_PIXEL_FORMAT_YCbCr_422_SP) 
     {
@@ -357,6 +365,21 @@ static int gralloc_alloc(alloc_device_t* dev,
             case HAL_PIXEL_FORMAT_YCbCr_420_SP:
                 size = stride * h * 2;
                 break;
+
+#else
+    if ((format == HAL_PIXEL_FORMAT_YCbCr_420_SP) || 
+        (format == HAL_PIXEL_FORMAT_YCbCr_420_P) ||
+            (format == HAL_PIXEL_FORMAT_YCbCr_422_SP)) 
+    {
+        // FIXME: there is no way to return the vstride
+        int vstride;
+        stride = (w + 1) & ~1; 
+        switch (format) {
+            case HAL_PIXEL_FORMAT_YCbCr_420_SP:
+            case HAL_PIXEL_FORMAT_YCbCr_420_P:
+                size = stride * h * 2;
+                break;
+#endif
             case HAL_PIXEL_FORMAT_YCbCr_422_SP:
                 vstride = (h+1) & ~1;
                 size = (stride * vstride) + (w/2 * h/2) * 2;

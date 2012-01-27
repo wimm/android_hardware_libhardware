@@ -138,6 +138,13 @@ enum {
     HAL_PIXEL_FORMAT_YCbCr_420_I  = 0x15,
     HAL_PIXEL_FORMAT_CbYCrY_422_I = 0x16,
     HAL_PIXEL_FORMAT_CbYCrY_420_I = 0x17
+//#ifdef SLSI_S5P6442
+    ,
+    // added by jamie to support customed format for zero copy (2009.07.02)
+    HAL_PIXEL_FORMAT_CUSTOM_YCbCr_420_SP = 0x20,
+    HAL_PIXEL_FORMAT_CUSTOM_YCbCr_422_I  = 0x21,
+    HAL_PIXEL_FORMAT_CUSTOM_CbYCr_422_I  = 0x22 //Kamat
+//#endif /* SLSI_S5P6442 */
 };
 
 

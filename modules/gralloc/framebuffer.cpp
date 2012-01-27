@@ -37,6 +37,15 @@
 #include <linux/fb.h>
 #endif
 
+#ifdef SLSI_S5P6442
+#ifndef DEFAULT_FB_NUM
+	#error "WHY DON'T YOU SET FB NUM.."
+//#define DEFAULT_FB_NUM 0
+#endif
+
+#include "s3c_lcd.h"
+#endif
+
 #include "gralloc_priv.h"
 #include "gr.h"
 
@@ -107,11 +116,33 @@ static int fb_post(struct framebuffer_device_t* dev, buffer_handle_t buffer)
         const size_t offset = hnd->base - m->framebuffer->base;
         m->info.activate = FB_ACTIVATE_VBL;
         m->info.yoffset = offset / m->finfo.line_length;
+#ifndef SLSI_S5P6442
         if (ioctl(m->framebuffer->fd, FBIOPUT_VSCREENINFO, &m->info) == -1) {
             LOGE("FBIOPUT_VSCREENINFO failed");
             m->base.unlock(&m->base, buffer); 
             return -errno;
         }
+#else
+
+        // changed by jamie (2009.09.04)
+	
+        // LCD driver changes other configurations each FBIOPUT_VSCREENINFO call.
+        // However, it changes only FB address configuration for the FBIOPAN_DISPLAY call.
+        if (ioctl(m->framebuffer->fd, FBIOPAN_DISPLAY, &m->info) == -1) {
+            LOGE("%s::FBIOPAN_DISPLAY fail(%s)", __func__, strerror(errno));
+            m->base.unlock(&m->base, buffer); 
+            return 0;
+        }
+		
+        // wait for VSYNC
+        unsigned int crtc = 0;
+        if(ioctl(m->framebuffer->fd, FBIO_WAITFORVSYNC, &crtc) < 0)
+        {
+            LOGE("%s::FBIO_WAITFORVSYNC fail(%s)", __func__, strerror(errno));
+            m->base.unlock(&m->base, buffer); 
+            return 0;
+        }
+#endif
         m->currentBuffer = buffer;
         
     } else {
@@ -358,7 +389,29 @@ int fb_device_open(hw_module_t const* module, const char* name,
             const_cast<uint32_t&>(dev->device.width) = m->info.xres;
             const_cast<uint32_t&>(dev->device.height) = m->info.yres;
             const_cast<int&>(dev->device.stride) = stride;
+#ifndef SLSI_S5P6442
             const_cast<int&>(dev->device.format) = HAL_PIXEL_FORMAT_RGB_565;
+#else
+            int hal_pixel_format = HAL_PIXEL_FORMAT_RGB_565;
+
+            switch(m->info.bits_per_pixel)
+            {
+                case 16 :
+                    hal_pixel_format = HAL_PIXEL_FORMAT_RGB_565;
+                    break;
+                case 24 :
+                    hal_pixel_format = HAL_PIXEL_FORMAT_RGBX_8888;
+                    break;
+                case 32 :
+                    hal_pixel_format = HAL_PIXEL_FORMAT_RGBA_8888;
+                    break;
+                default :
+                    hal_pixel_format = HAL_PIXEL_FORMAT_RGB_565;
+                    break;
+            }
+				
+            const_cast<int&>(dev->device.format) = hal_pixel_format;
+#endif
             const_cast<float&>(dev->device.xdpi) = m->xdpi;
             const_cast<float&>(dev->device.ydpi) = m->ydpi;
             const_cast<float&>(dev->device.fps) = m->fps;

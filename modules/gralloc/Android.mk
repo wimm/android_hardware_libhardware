@@ -21,6 +21,9 @@ include $(CLEAR_VARS)
 LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_SHARED_LIBRARIES := liblog libcutils
+ifeq ($(TARGET_BOARD_PLATFORM),s5p6442)
+LOCAL_C_INCLUDES += vendor/sec_proprietary/include
+endif
 
 LOCAL_SRC_FILES := 	\
 	allocator.cpp 	\
@@ -30,4 +33,10 @@ LOCAL_SRC_FILES := 	\
 	
 LOCAL_MODULE := gralloc.default
 LOCAL_CFLAGS:= -DLOG_TAG=\"gralloc\"
+
+ifeq ($(TARGET_BOARD_PLATFORM),s5p6442)
+LOCAL_CFLAGS  += -DSLSI_S5P6442
+LOCAL_CFLAGS  += -DDEFAULT_FB_NUM=$(DEFAULT_FB_NUM)
+endif
+
 include $(BUILD_SHARED_LIBRARY)
