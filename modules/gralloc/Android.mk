@@ -22,7 +22,7 @@ LOCAL_PRELINK_MODULE := false
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_SHARED_LIBRARIES := liblog libcutils
 ifeq ($(TARGET_BOARD_PLATFORM),s5p6442)
-LOCAL_C_INCLUDES += vendor/sec_proprietary/include
+LOCAL_C_INCLUDES += device/sec_proprietary/include
 endif
 
 LOCAL_SRC_FILES := 	\
