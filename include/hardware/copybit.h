@@ -46,8 +46,15 @@ enum {
     COPYBIT_FORMAT_BGRA_8888    = HAL_PIXEL_FORMAT_BGRA_8888,
     COPYBIT_FORMAT_RGBA_5551    = HAL_PIXEL_FORMAT_RGBA_5551,
     COPYBIT_FORMAT_RGBA_4444    = HAL_PIXEL_FORMAT_RGBA_4444,
-    COPYBIT_FORMAT_YCbCr_422_SP = 0x10,
-    COPYBIT_FORMAT_YCrCb_420_SP = 0x11,
+    COPYBIT_FORMAT_YCbCr_422_SP = HAL_PIXEL_FORMAT_YCbCr_422_SP,
+    COPYBIT_FORMAT_YCbCr_420_SP = HAL_PIXEL_FORMAT_YCbCr_420_SP,
+    COPYBIT_FORMAT_YCbCr_422_P  = HAL_PIXEL_FORMAT_YCbCr_422_P,
+    COPYBIT_FORMAT_YCbCr_420_P  = HAL_PIXEL_FORMAT_YCbCr_420_P,
+    COPYBIT_FORMAT_YCbCr_422_I  = HAL_PIXEL_FORMAT_YCbCr_422_I,
+    COPYBIT_FORMAT_YCbCr_420_I  = HAL_PIXEL_FORMAT_YCbCr_420_I,
+    COPYBIT_FORMAT_CUSTOM_YCbCr_420_SP  = HAL_PIXEL_FORMAT_CUSTOM_YCbCr_420_SP,
+    COPYBIT_FORMAT_CUSTOM_YCbCr_422_I   = HAL_PIXEL_FORMAT_CUSTOM_YCbCr_422_I,
+    COPYBIT_FORMAT_CUSTOM_CbYCr_422_I   = HAL_PIXEL_FORMAT_CUSTOM_CbYCr_422_I,
 };
 
 /* name for copybit_set_parameter */
@@ -198,6 +205,16 @@ struct copybit_device_t {
                    struct copybit_rect_t const *dst_rect,
                    struct copybit_rect_t const *src_rect,
                    struct copybit_region_t const *region);
+
+   //Tori Add for HGL
+    int (*stretchPP)(struct copybit_device_t *dev,
+                   struct copybit_image_t const *dst,
+                   struct copybit_image_t const *src,
+                   struct copybit_rect_t const *dst_rect,
+                   struct copybit_rect_t const *src_rect,
+                   struct copybit_region_t const *region,
+                   int flagPP);
+   //Tori Add end
 };
 
 
