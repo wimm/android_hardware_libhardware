@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ifeq ($(TARGET_BOARD_PLATFORM), $(filter s5pc110 wimm%, $(TARGET_BOARD_PLATFORM)))
-#ifeq ($(TARGET_BOARD_PLATFORM),wimm)                                                             
+ifeq ($(TARGET_BOARD_PLATFORM), s5p6442)
 LOCAL_PATH:= $(call my-dir)
 # HAL module implemenation, not prelinked and stored in
 # hw/<COPYPIX_HARDWARE_MODULE_ID>.<ro.board.platform>.so
@@ -26,13 +25,9 @@ LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 
 LOCAL_SHARED_LIBRARIES := liblog
 
-# LOCAL_MODULE := lights.$(TARGET_DEVICE)
-# sm.kim: rename temporarily
 LOCAL_MODULE_TAGS := optional 
 
-LOCAL_MODULE := lights.$(TARGET_BOARD_PLATFORM)
-
-LOCAL_CFLAGS  += -DSLSI_S5P6442
+LOCAL_MODULE := lights.$(TARGET_DEVICE)
 
 include $(BUILD_SHARED_LIBRARY)
 endif  

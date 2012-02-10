@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ifeq ($(TARGET_BOARD_PLATFORM), $(filter s5pc110 wimm%, $(TARGET_BOARD_PLATFORM)))
-#ifeq ($(TARGET_BOARD_PLATFORM),wimm)
+ifeq ($(TARGET_BOARD_PLATFORM), s5p6442)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -27,11 +26,6 @@ LOCAL_SRC_FILES:= s5prender.cpp
 
 ifeq ($(BOARD_USES_HDMI),true)
 LOCAL_CFLAGS += -DHW_HDMI_USE
-endif
-
-ifeq ($(TARGET_BOARD_PLATFORM), $(filter s5pc110 wimm%, $(TARGET_BOARD_PLATFORM)))
-#ifeq ($(TARGET_BOARD_PLATFORM),wimm)
-LOCAL_CFLAGS += -DSLSI_S5P6442
 endif
 
 LOCAL_CFLAGS  += \
@@ -63,8 +57,6 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE:= librender
 
 LOCAL_PRELINK_MODULE := false
-
-#LOCAL_CFLAGS  += -DSLSI_S3C6410
 
 include $(BUILD_SHARED_LIBRARY)
 endif

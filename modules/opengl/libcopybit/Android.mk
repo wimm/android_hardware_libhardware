@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ifeq ($(TARGET_BOARD_PLATFORM), $(filter s5pc110 wimm%, $(TARGET_BOARD_PLATFORM)))
+ifeq ($(TARGET_BOARD_PLATFORM), s5p6442)
 ifeq ($(BOARD_USES_G2D),true)
 
 LOCAL_PATH:= $(call my-dir)

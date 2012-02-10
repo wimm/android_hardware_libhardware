@@ -11,13 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#ifeq ($(TARGET_BOARD_PLATFORM),wimm)
-ifeq ($(TARGET_BOARD_PLATFORM), $(filter s5pc110 wimm%, $(TARGET_BOARD_PLATFORM)))
+ifeq ($(TARGET_BOARD_PLATFORM), s5p6442)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_PRELINK_MODULE := false
-#LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_SHARED_LIBRARIES := liblog 
 LOCAL_SRC_FILES := hdmi_api.c
 
