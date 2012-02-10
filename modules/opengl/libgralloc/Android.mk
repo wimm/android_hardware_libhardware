@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#ifeq ($(TARGET_BOARD_PLATFORM),wimm)
-ifeq ($(TARGET_BOARD_PLATFORM), $(filter s5pc110 wimm%, $(TARGET_BOARD_PLATFORM)))
+ifeq ($(TARGET_BOARD_PLATFORM), s5p6442)
 
 LOCAL_PATH := $(call my-dir)
 
@@ -37,8 +36,8 @@ LOCAL_CFLAGS:= -DLOG_TAG=\"gralloc\"
 LOCAL_SHARED_LIBRARIES += librender
 LOCAL_C_INCLUDES +=  $(LOCAL_PATH)/../include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../librender
-LOCAL_CFLAGS  += -DSLSI_S5P6442
 LOCAL_CFLAGS  += -DDEFAULT_FB_NUM=$(DEFAULT_FB_NUM)
 
 include $(BUILD_SHARED_LIBRARY)
+
 endif

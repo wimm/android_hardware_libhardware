@@ -1,7 +1,7 @@
+ifeq ($(TARGET_BOARD_PLATFORM), s5p6442)
+
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter wimm%,$(TARGET_DEVICE)),)
-#ifeq ($(TARGET_BOARD_PLATFORM),wimm)
 # HAL module implemenation, not prelinked and stored in
 # hw/<GPS_HARDWARE_MODULE_ID>.<ro.hardware>.so
 include $(CLEAR_VARS)
