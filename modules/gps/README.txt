@@ -31,9 +31,6 @@ When "gps_cleanup" is called, we stop the read and write threads and power off t
 
 KNOWN ISSUES:
 
-ISSUE: GPS chip is reset when device suspends/resumes.
-NOTES: After a suspend/resume, serial port reverts to 4800 baud and patch data is lost.  Only a few things should be able to do this: toggling the GPS's RESET or ON_OFF pins or completely pulling power from the GPS chip.  I've checked the GPS kernel driver (sirf-gsd4e.c).  It has no suspend or resume hooks so I don't think that it is the culprit.  Nothing else (other than gpio-wimm.c) references the 3 relevant GPIOs (GPIO_GPS_PWR_EN, GPIO_GPS_ON_OFF, GPIO_GPS_RST) so I'm doubting that it's a software issue.
-
 ISSUE: Location/Time injection is not be working correctly.  
 NOTES: After SGEE upload, but without any injection, the GSV messages show satellites 1-12 with all 0 values for SNR and position.  After sending the LLA Nav Init command (WARM_RESET_WITH_INIT) with location and time, the GSV messages change to show the satellites that are currently visible.  However, after several seconds of exposure to open sky, the positions of the satellites given by the GSV messages shift dramatically.  This shift may indicate that the currently visible satellites are not being calculated correctly.  Additionally, if the WARM_RESET_WITH_INIT is issued with SGEE already loaded (after exiting hibernation, for example) the chip sends a request for a new SGEE file.  This should not happen; the chip should be ok with the SGEE already loaded.
 
